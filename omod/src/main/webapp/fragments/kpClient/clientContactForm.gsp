@@ -10,7 +10,7 @@
 		<table>
 			<tr>
 				<th rowspan="2">Date</th>
-				<th rowspan="2">KP Type</th>
+				<th rowspan="2">FFx Type</th>
 				<th rowspan="2">Hotspot</th>
 				<th rowspan="2">Sex Acts<br>per week</th>
 				<th rowspan="2">Anal Sex Acts<br>per week</th>

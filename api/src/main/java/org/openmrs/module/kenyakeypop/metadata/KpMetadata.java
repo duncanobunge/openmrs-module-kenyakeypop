@@ -236,13 +236,13 @@ public class KpMetadata extends AbstractMetadataBundle {
 		    "1", KpMetadata._Form.KP_CLINICAL_VISIT_FORM));
 		install(form("Peer Calendar", "Form for updating peer calendar", KpMetadata._EncounterType.KP_PEER_CALENDAR, "1",
 		    KpMetadata._Form.KP_PEER_CALENDAR_FORM));
-		install(form("KP Diagnosis", "Form for updating diagnosis", KpMetadata._EncounterType.KP_DIAGNOSIS, "1",
+		install(form("FFx Diagnosis", "Form for updating diagnosis", KpMetadata._EncounterType.KP_DIAGNOSIS, "1",
 		    KpMetadata._Form.KP_DIAGNOSIS_FORM));
 		
 		install(form("Referral", "Form for adding referrals", KpMetadata._EncounterType.KP_REFERRAL, "1",
 		    KpMetadata._Form.KP_REFERRAL_FORM));
 		
-		install(form("KP HIV Treatment Verification", "treatment verification form",
+		install(form("FFx HIV Treatment Verification", "treatment verification form",
 		    KpMetadata._EncounterType.KP_TREATMENT_VERIFICATION, "1", _Form.KP_TREATMENT_VERIFICATION_FORM));
 		
 		install(form("PrEP Treatment Verification", "prep treatment verification form",
@@ -278,7 +278,7 @@ public class KpMetadata extends AbstractMetadataBundle {
 		install(globalProperty(KpConstant.GP_IMPLEMENTING_PARTNER_CODE, "KP implementing partner code", partnerCodeValue));
 		install(globalProperty(KpConstant.GP_WARD_CODE, "KP ward code", wardCodeValue));
 		
-		install(program("Key Population", "Treatment for Key Population clients", kp_concept, _Program.KEY_POPULATION));
+		install(program("Fisherfolk Population", "Treatment for FFx Population clients", kp_concept, _Program.KEY_POPULATION));
 		
 	}
 }

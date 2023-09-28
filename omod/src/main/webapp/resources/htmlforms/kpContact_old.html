@@ -1,0 +1,566 @@
+<!--
+  ~ The contents of this file are subject to the OpenMRS Public License
+  ~ Version 1.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~ http://license.openmrs.org
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS"
+  ~ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing rights and limitations
+  ~ under the License.
+  ~
+  ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+-->
+<htmlform>
+    <macros>
+        <macro key="countyNames" value="Nairobi,Mombasa,Kilifi,Kwale,Homa Bay,Kisumu,Migori,Kisii,Uasin Gishu,Bomet,Busia,Kiambu,Nyeri,Muranga,Kirinyaga,Nyandarua,Machakos,Kitui,Makueni,Embu,Meru,Isiolo,Marsabit,Turkana,Mandera,Lamu,West Pokot,Bungoma,Vihiga,Kakamega,Siaya,Nyamira,Kericho,Trans Nzoia,Nakuru,Laikipia,Tharaka Nithi,Garissa,Taita Taveta,Tana River,Samburu,Elgeyo Marakwet,Nandi,Baringo,Narok,Kajiado,Wajir" />
+        <macro key="subCountyList" value="Select County"/>
+        <macro key="wardList" value="Select Sub-County"/>
+    </macros>
+
+    <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/moment.js"></script>
+    <script type="text/javascript" src="../moduleResources/kenyaemr/scripts/KenyaAddressHierarchy.js"></script>
+    <style>
+        .simple-table {
+            border: solid 1px #DDEEEE;
+            border-collapse: collapse;
+            border-spacing: 0;
+            font: normal 13px Arial, sans-serif;
+        }
+
+        .simple-table thead th {
+            background-color: #DDEFEF;
+            border: solid 1px #DDEEEE;
+            color: #336B6B;
+            padding: 10px;
+            text-align: left;
+            text-shadow: 1px 1px 1px #fff;
+        }
+
+        .simple-table td {
+            border: solid 1px #DDEEEE;
+            color: #333;
+            padding: 10px;
+            text-shadow: 1px 1px 1px #fff;
+        }
+        .ke-error-label{
+            color: red;
+        }
+        .ke-success-label{
+            color: green;
+        }
+    </style>
+    <script type="text/javascript">
+        var TRANSFER_IN = 160563;
+        var NEW_CLIENT = 164144;
+        var pgender = "<lookup expression="patient.gender" />";
+        var patientId = <lookup expression="patient.patientId"/>;
+        var kpVelocity = "<lookup expression="kenyakeypop.KpVelocityCalculation()" />";
+        var kpAlias = kpVelocity.split(",")[0].split(":")[1];
+        var idgen = kpVelocity.split(",")[1].split(":")[1];
+        var county = kpVelocity.split(",")[3].split(":")[1];
+
+        var subCounty = kpVelocity.split(",")[4].split(":")[1];
+        var ward = kpVelocity.split(",")[5].split(":")[1];
+        var implementingPartner = kpVelocity.split(",")[6].split(":")[1];
+
+        var ctxPath = typeof openmrsContextPath === 'string' ? openmrsContextPath : OPENMRS_CONTEXT_PATH;
+
+        var YEAR_STARTED_SEX_WORK = "<lookup expression="fn.latestObs(165030).getValueNumeric()"/>";
+        var YEAR_STARTED_SEX_WITH_MEN = "<lookup expression="fn.latestObs(165031).getValueNumeric()"/>";
+        var YEAR_STARTED_DRUGS = "<lookup expression="fn.latestObs(165032).getValueNumeric()"/>";
+
+        function onHistoricalStatusDateChange() {
+
+            var today = new Date()//.getTime();        //get current date
+
+
+            /*this data should not be in Future */
+            if (ENC_DATE &gt; today) {
+                getField('encounter-date.error').html('Should not be greater than the Current date').show();
+            }
+            else if(ENC_DATE &lt; bithYear)
+            {
+                /* Encounter Date should be greater than the Patients's date of Birth    */
+                getField('encounter-date.error').html('Should not be less than the date of Birth').show();
+            }
+            else
+            {
+                getField('encounter-date.error').hide();
+            }
+
+            jq.getJSON('/' + OPENMRS_CONTEXT_PATH + '/kenyaemr/patient/patientUtils/age.action', { patientId: patientId, now: encDate })
+                .done(function(data) {
+                    onPatientAgeUpdate(data.age);
+                });
+        }
+       jq(document).ready(function () {
+            jq("#date").datepicker({
+                changeMonth: false,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+                duration: 'fast',
+                stepMonths: 0
+            });
+
+           
+
+            function sexAct(number, textfield) {
+                if(!number==""){
+                    if (Number(number) > Number(0) &amp;&amp; Number(number) &lt; Number(200))
+                    {
+                        getField(textfield+'.error').html('Please enter valid number. can not be zero and more than 200.').hide();
+                    }
+                    else{
+                        getField(textfield+'.value').val("");
+                        getField(textfield+'.error').html('Please enter valid number. can not be zero and more than 200.').show();
+                    }
+                }
+
+            }
+
+            function yearValidation(year, textfield) {
+
+
+                if (year != 0) {
+                    var test=year;
+                    if (year.length != 4) {
+                        getField(textfield+'.error').html('Please enter valid year.').show();
+                        getField(textfield+'.value').val('');
+                        return false;
+                    }
+
+                    var birthDate= ('(<lookup expression="patient.birthdate"/>)');
+                    var bithYear = birthDate.substring(8);
+                    if(year &lt; bithYear)
+                    {
+                        /* Encounter Date should be greater than the Patients's date of Birth    */
+                        getField(textfield+'.error').html('Should not be less than the date of Birth').show();
+                        getField(textfield+'.value').val('');
+                        return false;
+                    }
+                    else
+                    {
+                        getField(textfield+'.error').hide();
+                    }
+
+                    var current_year = new Date().getFullYear();
+                    if ((year > current_year)) {
+                        getField(textfield+'.error').html('Year should not be greater than current year.').show();
+                        getField(textfield+'.value').val('');
+                        return false;
+                    }
+                    getField(textfield+'.error').html('Please enter valid year.').hide();
+                }
+            }
+
+        });
+        function onOtherHotspotSelected() {
+            var val = jq(this).val();
+            if(val == 5622 ){
+                jq("#other-hotspots-specify").show();
+            }
+            else{
+                jq("#other-hotspots-specify").hide();
+            }
+        }
+        function validateContactNumber() {
+            var mobile_number = getField('mobile.value').val();
+            var regex = /^(?:\+254|0|254)(\d{9})$/
+            if(!regex.test(mobile_number)){
+                getField('mobile.value').val('');
+                getField('mobile.error').html('Please enter valid phone number.').show();
+            }
+            else{
+                getField('mobile.error').html('Please enter valid phone number.').hide();
+            }
+        }
+
+
+        function validateUpnNumber() {
+
+            var upn = jq('#kp-id input[type=text]').val();
+            if (upn != "") {
+                if(upn.length  &gt; 28 &amp;&amp;  upn.length &lt; 33) {
+                    jq("#upnError").text("Invalid Unique Identifier Code(accepts between 29 and 33 characters for existing UIC)").hide();
+
+                }
+                else{
+                    jq("#upnError").text("Invalid Unique Identifier Code(accepts between 29 and 33 characters for existing UIC)").show();
+                    jq('#kp-id input[type=text]').val('');
+                }
+            }
+
+        }
+
+        function saveClientAlias() {
+            var clientAliasValue = jq("#kpalias").val();
+            jq.getJSON('/' + ctxPath + '/kenyakeypop/kpClient/clientContactForm/saveOrUpdateClientAlias.action', {
+                patientId: patientId,
+                alias: clientAliasValue
+
+            }, function(data) {
+                if (data.status == "Success") {
+                    jq("#lblClientAliasCompletionState").text(data.message).addClass("ke-success-label");
+
+                } else {
+                    jq("#lblClientAliasCompletionState").text(data.message).addClass("ke-error-label");
+
+                }
+
+            });
+
+        }
+
+        beforeSubmit.push(function() {
+            var hotspot_frequented = getField('hotspot_frequented.value').val();
+            var kpUPN = jq('#kp-id input[type=text]').val();
+            var start_sex = getField("startSex.value").val();
+            var sex_with_men = getField("sexWithMen.value").val();
+            var using_drugs = getField("usingDrugs.value").val();
+            var number_of_drugs = getField('number_of_Drugs.value').val();
+            var upn = jq('#kp-id input[type=text]').val();
+            var entryPointStatus = getValue('transfer-in-status.value');
+            var transferInDate = getValue('transfer-in-date.value');
+            var firstEnrolledDate = getValue('first-enrolled-date.value');
+            var transferFacility = getValue('transfer-facility.value');
+            var keyPopType = getValue('key_pop_type.value');
+
+            if (entryPointStatus == "") {
+                getField('transfer-in-status.error').html('Please provide transfer in status.').show();
+                return false;
+            }else {
+                getField('transfer-in-status.error').html('Please provide transfer in status.').hide();
+            }
+            if (entryPointStatus== TRANSFER_IN  &amp;&amp; transferInDate == "") {
+                getField('transfer-in-date.error').html('Please provide transfer in date.').show();
+                return false;
+            }else {
+                getField('transfer-in-status.error').html('Please provide transfer in date.').hide();
+            }
+            if (entryPointStatus== TRANSFER_IN  &amp;&amp; transferFacility == "") {
+                getField('transfer-facility.error').html('Please provide facility transferred from.').show();
+                return false;
+            }else {
+                getField('transfer-facility.error').html('Please provide facility transferred from.').hide();
+            }
+            if (entryPointStatus== TRANSFER_IN  &amp;&amp; firstEnrolledDate == "") {
+                getField('first-enrolled-date.error').html('Please provide date first enrolled in FFx program.').show();
+                return false;
+            }else {
+                getField('first-enrolled-date.error').html('Please provide date first enrolled in FFx program.').hide();
+            }
+
+            if(entryPointStatus== TRANSFER_IN) {
+                var isTransferInBeforeFirstEnrolled = moment(moment(moment(transferInDate, 'YYYY-MM-DD').toDate()).format('YYYY-MM-DD')).isBefore(moment(moment(firstEnrolledDate, 'YYYY-MM-DD').toDate()).format('YYYY-MM-DD'));
+                if (isTransferInBeforeFirstEnrolled) {
+                    getField('transfer-in-date.error').html('Transfer in date, should not be later than Date first enrolled in FFx program').show();
+                    return false;
+                }
+            }
+
+            if (keyPopType == "") {
+                getField('key_pop_type.error').html('Please provide FFx population type.').show();
+                return false;
+            }else {
+                getField('key_pop_type.error').html('Please provide FFx population type.').hide();
+            }
+
+            if (keyPopType != 1175 &amp;&amp; hotspot_frequented == "") {
+                getField('hotspot_frequented.error').html('Please provide hot spot name mostly frequented.').show();
+                return false;
+            }else{
+                getField('hotspot_frequented.error').html('Please provide hot spot name mostly frequented.').hide();
+            }
+          
+        });
+
+        function checkForExistingPatientIdentifiers() {
+            var upnEntered = jq('#kp-id input[type=text]').val();
+            jq.getJSON('/' + ctxPath + '/kenyaemr/emrUtils/identifierExists.action', { upn: upnEntered }, function(data) {
+                jq('#upnError').hide();
+                if (data.upnExists === true) {
+
+                    jq('#upnError').text("A patient with similar UPN already exists. Please correct before proceeding");
+                    jq('#upnError').show();
+                    jq('#kp-id input[type=text]').focus();
+                }
+            });
+        }
+
+        
+
+        var onContactedByPeerEducatorChange = function() {
+            var val = jq(this).val();
+            if(val ==1065){
+                jq("#program_name").show();
+            }else {
+                jq("#program_name").hide();
+            }
+        }
+
+        function onTransferStatusChange() {
+            var transferStatus = getValue('transfer-in-status.value');
+            var transferDate = jq('#transfer-date');
+            var transferFacility = jq('#transfer-facility');
+            var transferDateEnrolled = jq('#transfer-enrolment-date');
+            //New patient
+            if (transferStatus == NEW_CLIENT) {
+                jq('#kp-id :input').prop('disabled', false);
+                jq('.ke-program-followup-button').show();
+                jq("#transfer-date").hide();
+                jq("#transfer-facility").hide();
+                jq("#transfer-enrolment-date").hide();
+                clearHiddenSections(jq('#transfer-date'));
+                clearHiddenSections(jq('#transfer-facility'));
+                clearHiddenSections(jq('#transfer-enrolment-date'));
+            }
+            //Transfer in
+            if (transferStatus== TRANSFER_IN) {
+                jq('#kp-id :input').prop('disabled', false);
+                jq('.ke-program-followup-button').hide();
+                jq("#transfer-date").show();
+                jq("#transfer-facility").show();
+                jq("#transfer-enrolment-date").show();
+            }
+        }
+
+
+        clearHiddenSections = function(parentObj) {
+            parentObj.find('input[type=radio]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=checkbox]').each(function() {
+                this.checked = false;
+            });
+            parentObj.find('input[type=text]').each(function() {
+                jq(this).val("");
+            });
+            parentObj.find('select').each(function() {
+                this.selectedIndex =0;
+            });
+        }
+
+    </script>
+
+    <ifMode mode="EDIT">
+        <script type="text/javascript">
+            jq(function(){
+                var transferStatus = getValue('transfer-in-status.value');
+                var kpType = getValue('key_pop_type.value');
+                var peerEducator = getValue('peer-educator.value');
+                //New patient
+                if (transferStatus == NEW_CLIENT) {
+                    jq('#kp-id :input').prop('disabled', false);
+                    jq('.ke-program-followup-button').show();
+                    jq("#transfer-date").hide();
+                    jq("#transfer-facility").hide();
+                    jq("#transfer-enrolment-date").hide();
+                }
+                //Transfer in
+                if (transferStatus== TRANSFER_IN) {
+                    jq('#kp-id :input').prop('disabled', false);
+                    jq('.ke-program-followup-button').hide();
+                    jq("#transfer-date").show();
+                    jq("#transfer-facility").show();
+                    jq("#transfer-enrolment-date").show();
+                }
+               
+                if(peerEducator ==1065){
+                    jq("#program_name").show();
+                }else {
+                    jq("#program_name").hide();
+                }
+
+            });
+        </script>
+    </ifMode>
+
+    <div class="ke-form-header">
+        <table width="100%">
+            <tr>
+                <td align="left">Date of first contact:
+                    <encounterDate id="encounter-date" showTime="true"/>
+                </td>
+                <td align="right">Location:
+                    <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" type="autocomplete"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="ke-form-content">
+        <fieldset>
+            <legend>Contact Form</legend>
+            <table class="simple-table">
+                <tr>
+                    <td>Patient Type</td>
+                    <td colspan="3">
+                        <obs
+                                id="transfer-in-status" conceptId="164932" style="radio"
+                                answerConceptIds="164144,160563"
+                                answerLabels="New Patient,Transfer in"
+                               
+                                />
+                        <span style="color:red;"><strong>*</strong></span>
+                    </td>
+                </tr>
+                 <tr id="transfer-date">
+                            <td>Transfer in date:</td>
+                            <td colspan="3"><obs conceptId="160534AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="transfer-in-date" allowFutureDates="false"/></td>
+                  </tr>
+                  <tr id="transfer-facility">
+                            <td>Transferred from facility:</td>
+                            <td colspan="3"><obs conceptId="160535AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  size="20" id="transfer-facility"/></td>
+                    </tr>
+                   <tr id="transfer-enrolment-date">
+                       <td>Date <i>first</i> enrolled in FFx program:</td>
+                        <td colspan="3"><obs conceptId="160555AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="first-enrolled-date" allowFutureDates="false"/></td>
+                </tr>
+                <tr id="tr-key-pop" >
+                    <td>Fisher Folk Population Type</td>
+                    <td colspan="3">
+                        <obs id="key_pop_type" conceptId="164929"
+                             answerConceptIds="165083,160578,165084,105,165085,165100,162277,1175,159674,162198,160549,5622"
+                             answerLabels="Jo Adimo,Jo Gogo,Jo Likira,Jo Mapara,Jo Ochwako,Net Menders,Boat Builders,Boat Crews,Boat Owners,Fish driers,Fish traders,Fish Transporters"
+                             style="radio" /><span style="color:red;"><strong>*</strong></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Implementation
+                    </td>
+                    <td align="left" width="15%">
+                        County: <obs required="true" id="implementation-county" conceptId="CIEL:167131"  answers="$countyNames" answerLabels="$countyNames"/>
+
+                    </td>
+                    <td align="left" width="15%">
+                        Sub County: <obs id="implementation-subCounty" required="true" conceptId="161551" />
+                    </td>
+                    <td align="left" width="20%">
+                        Ward: <obs id="implementation-ward" required="true" conceptId="161550" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Unique Identifier code</td>
+                    <td>
+                        <span id="kp-id"><patient id="upn" field="identifier" identifierTypeId="b7bfefd0-239b-11e9-ab14-d663bd873d93" required="true" /></span>
+                        <span style="color:red;"><strong>*</strong></span>
+            
+                        <span id="upnError" class="error"></span>
+                    </td>
+                    <td>Alias:</td>
+                    <td>
+                        <span id="alias-success-label"><label style="color: green" id="lblClientAliasCompletionState"/></span>
+                        <input type="text" name="kpalias" id="kpalias" />
+                        <button   class="saveAlias">Save Alias</button>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>Alternative Contact Person</td>
+                    <td>
+                        Name :
+                        <obs id="altname" conceptId="160638"/>
+                    </td>
+                    <td>
+                        Telephone number :
+                    </td>
+                    <td>
+                        <obs id="mobile" conceptId="160642"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td >Have you been contacted by the program in your current place?</td>
+                    <td colspan="3">
+                        <obs id="peer-educator" conceptId="165004"
+                             answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                             answerLabels="Yes,No"
+                             style="radio" />
+                    </td>
+
+                </tr>
+                <tr id="program_name">
+
+                    <td width="400" valign="top">If yes, which programme do you receive service from?</td>
+                    <td colspan="3">
+                        <obs id="program" conceptId="165137"/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td >Beach/Hot spot mostly frequented</td>
+                    <td >
+                        <obs conceptId="165006" id="hotspot_frequented"/>
+                        <span style="color:red;"><strong>*</strong></span>
+                    </td>
+                    <td >Type of Hotspot</td>
+                    <td >
+                        <obs conceptId="165005"
+                             answerConceptIds="165011,
+                                                   165012,
+                                                   165013,
+                                                   165014,
+                                                   1536AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
+                                                   165015,
+                                                   165016,
+                                                   165017,
+                                                   165018,
+                                                   165019,
+                                                   165020,
+                                                   165021,
+                                                   165022,
+                                                   165023,
+                                                   165024,
+                                                   165025,
+                                                   165026,
+                                                   165297,
+                                                   5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                             answerLabels="Street,
+                                              Injecting den,
+                                              Uninhabitable building,
+                                              Park,
+                                              Homes,
+                                              Beach,
+                                              Casino,
+                                              Bar with lodging,
+                                              Bar without lodging,
+                                              Sex den,
+                                              Strip club,
+                                              Highways,
+                                              Brothel,
+                                              Guest house/Hotels/Lodgings,
+                                              Massage parlor,
+                                              Chang&apos;aa den,
+                                              Barbershop/Salon,
+                                              Virtual Space,
+                                              Other (Specify)"
+                             id="hotspot-type"
+                             style="dropdown" />
+                        <br/><br/>
+                        <obs conceptId="165298" id="other-hotspots-specify"/>
+                        <br />
+                    </td>
+                </tr>
+        
+
+                <tr>
+                    <td width="550" valign="top">On average, how many sex acts do you have per week</td>
+                    <td width="550" valign="top">
+                        <obs id="sex_act" conceptId="165007"/>
+
+                    </td>
+                </tr>
+
+            </table>
+    
+        </fieldset>
+        <enrollInProgram programId="7447305a-18a7-11e9-ab14-d663bd873d93"/>
+
+    </div>
+
+    <div class="ke-form-footer">
+        <submit/>
+    </div>
+
+</htmlform>

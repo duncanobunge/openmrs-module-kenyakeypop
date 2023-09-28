@@ -3,39 +3,34 @@
 <!-- Beans to add to the current Application context definition -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jee="http://www.springframework.org/schema/jee"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-  		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-  		    http://www.springframework.org/schema/context
-  		    http://www.springframework.org/schema/context/spring-context-3.0.xsd
-  		    http://www.springframework.org/schema/jee
-  		    http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
-  		    http://www.springframework.org/schema/tx
-  		    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-  		    http://www.springframework.org/schema/aop
-  		    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
-  		    http://www.springframework.org/schema/util
-  		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <context:component-scan base-package="org.openmrs.module.kenyakeypop" />
 
 
-
-    <bean id="kenyakeypop.app.keypopulation.provider" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
+    <bean id="kenyakeypop.app.keypopulation.provider" factory-bean="kenyacore.appFactoryBean"
+        factory-method="createInstance">
         <constructor-arg value="kenyakeypop.keypopulation.provider" />
-        <constructor-arg value="KP Provider" />
+        <constructor-arg value="FFx Provider" />
         <constructor-arg value="kenyakeypop/kpProviderHome.page" />
         <constructor-arg value="kenyakeypop:apps/clinician.png" />
         <constructor-arg value="2000" />
     </bean>
 
-    <bean id="kenyakeypop.app.keypopulation.calendar" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
+    <bean id="kenyakeypop.app.keypopulation.calendar" factory-bean="kenyacore.appFactoryBean"
+        factory-method="createInstance">
         <constructor-arg value="kenyakeypop.keypopulation.calendar" />
         <constructor-arg value="Peer Calendar" />
         <constructor-arg value="kenyakeypop/kenyakeypopulationPeerCalendarHome.page" />
@@ -45,8 +40,9 @@
 
     <bean id="kenyakeypop.program" class="org.openmrs.module.kenyacore.program.ProgramDescriptor">
         <property name="targetUuid" value="7447305a-18a7-11e9-ab14-d663bd873d93" />
-        <property name="eligibilityCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForKPProgramCalculation" />
-        <property name="defaultEnrollmentForm" ref="kenyakeypop.form.kpContact"  />
+        <property name="eligibilityCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForKPProgramCalculation" />
+        <property name="defaultEnrollmentForm" ref="kenyakeypop.form.kpContact" />
         <property name="defaultCompletionForm" ref="kenyakeypop.form.completion" />
         <property name="patientForms">
             <set>
@@ -55,30 +51,27 @@
         </property>
         <property name="visitForms">
             <set>
-                <ref bean="kenyakeypop.form.kpClientTracing"/>
-                <ref bean="kenyakeypop.form.kpSTITreatment"/>
-                <ref bean="kenyakeypop.form.kpPeerOverdoseReporting"/>
-                <ref bean="kenyakeypop.form.kpHealthWorkerOverdoseReporting"/>
-                <ref bean="kenyakeypop.form.kpViolenceScreening"/>
-                <ref bean="kenyakeypop.form.kpReferral"/>
-                <ref bean="kenyakeypop.form.kpAlcoholScreening"/>
+                <ref bean="kenyakeypop.form.kpClientTracing" />
+                <ref bean="kenyakeypop.form.kpSTITreatment" />
+                <ref bean="kenyakeypop.form.kpPeerOverdoseReporting" />
+                <ref bean="kenyakeypop.form.kpHealthWorkerOverdoseReporting" />
+                <ref bean="kenyakeypop.form.kpViolenceScreening" />
+                <ref bean="kenyakeypop.form.kpReferral" />
+                <ref bean="kenyakeypop.form.kpAlcoholScreening" />
                 <ref bean="kenyakeypop.form.kpClinicalVisitForm" />
                 <ref bean="kenyakeypop.form.kpDiagnosis" />
                 <ref bean="kenyakeypop.form.kpTreatmentVerification" />
                 <ref bean="kenyakeypop.form.prepTreatmentVerification" />
                 <ref bean="kenyakeypop.form.genderBasedViolence" />
                 <ref bean="kenyaemr.common.form.tbScreening" />
-
-
-
             </set>
         </property>
 
         <property name="fragments">
             <map>
-                <entry key="enrollment-summary" value="kenyakeypop:program/kp/kpEnrollmentSummary"/>
-                <entry key="care-panel" value="kenyakeypop:program/kp/kpCarePanel"/>
-                <entry key="completion-summary" value="kenyakeypop:program/kp/kpCompletionSummary"/>
+                <entry key="enrollment-summary" value="kenyakeypop:program/kp/kpEnrollmentSummary" />
+                <entry key="care-panel" value="kenyakeypop:program/kp/kpCarePanel" />
+                <entry key="completion-summary" value="kenyakeypop:program/kp/kpCompletionSummary" />
             </map>
         </property>
         <property name="order" value="590" />
@@ -87,7 +80,8 @@
                 <ref bean="kenyaemr.kenyakeypop.kenyakeypop.report.moh731b" />
                 <ref bean="kenyaemr.kenyakeypop.kenyakeypop.report.outreachWorkerSummary" />
                 <ref bean="kenyaemr.kenyakeypop.kenyakeypop.report.cohort.analysis.kpRegister" />
-                <ref bean="kenyaemr.kenyakeypop.kenyakeypop.report.cohort.analysis.kpPeerTrackingRegister" />
+                <ref
+                    bean="kenyaemr.kenyakeypop.kenyakeypop.report.cohort.analysis.kpPeerTrackingRegister" />
                 <ref bean="kenyaemr.kenyakeypop.kenyakeypop.report.monthlyReport" />
                 <ref bean="kenyaemr.kenyakeypop.kenyakeypop.report.CurrentlyOnKpLineList" />
             </set>
@@ -98,7 +92,7 @@
     <bean id="kenyakeypop.config.form" class="org.openmrs.module.kenyacore.form.FormConfiguration">
         <property name="commonVisitForms">
             <set>
-                <ref bean="kenyakeypop.form.kpDepressionScreening"/>
+                <ref bean="kenyakeypop.form.kpDepressionScreening" />
             </set>
         </property>
     </bean>
@@ -106,7 +100,8 @@
     <!-- ===================== Forms ===================== -->
 
     <!-- kp  enrollment -->
-    <bean id="kenyakeypop.form.kpClientEnrollment" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpClientEnrollment"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="c7f47cea-207b-11e9-ab14-d663bd873d93" />
         <property name="apps">
             <set>
@@ -122,7 +117,8 @@
 
     </bean>
 
-    <!--KP Completion -->
+    <!--KP
+    Completion -->
     <bean id="kenyakeypop.form.completion" class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="1f76643e-2495-11e9-ab14-d663bd873d93" />
         <property name="apps">
@@ -137,7 +133,8 @@
         <property name="icon" value="kenyaui:forms/completion.png" />
         <property name="htmlform" value="kenyakeypop:kpDiscontinuation.html" />
     </bean>
-    <!--  <bean id="kenyaemr.config.report" class="org.openmrs.module.kenyacore.report.ReportConfiguration">
+    <!--  <bean id="kenyaemr.config.report"
+    class="org.openmrs.module.kenyacore.report.ReportConfiguration">
           <property name="reports">
               <set>
                   <ref bean="kenyaemr.kenyakeypop.kenyakeypop.report.moh731b" />
@@ -147,7 +144,8 @@
           </property>
       </bean>-->
     <!-- kp peer calendar -->
-    <bean id="kenyakeypop.form.kpPeerCalendar" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpPeerCalendar"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="7492cffe-5874-4144-a1e6-c9e455472a35" />
         <property name="apps">
             <set>
@@ -178,67 +176,89 @@
 
     <!--Reports-->
     <!-- KP register-->
-    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.cohort.analysis.kpRegister" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.cohort.analysis.kpRegister"
+        class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
         <property name="targetUuid" value="601fb262-ec35-48bb-a1e8-44e0274a06d0" />
         <property name="name" value="KP Cohort Register" />
         <property name="description" value="KP Cohort Register" />
-        <property name="apps"><set><ref bean="kenyaemr.app.reports" /></set></property>
+        <property name="apps">
+            <set>
+                <ref bean="kenyaemr.app.reports" />
+            </set>
+        </property>
         <property name="template" value="kenyakeypop:KP_Cohort_Register.xls" />
         <property name="repeatingSection" value="sheet:1,row:6,dataset:KPRegister" />
     </bean>
 
-    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.outreachWorkerSummary" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.outreachWorkerSummary"
+        class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
         <property name="targetUuid" value="2b7c5b52-d11e-4340-a55f-5f1053ad2110" />
         <property name="name" value="Outreach Worker Summary" />
         <property name="description" value="Outreach Worker Summary" />
         <property name="apps">
             <set>
                 <ref bean="kenyaemr.app.reports" />
-            </set></property>
+            </set>
+        </property>
         <property name="template" value="kenyakeypop:Outreach_Workers_summary_Template.xls" />
         <property name="repeatingSection" value="sheet:1,row:8,dataset:OutreachWorkerSummary" />
     </bean>
 
-    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.moh731b" class="org.openmrs.module.kenyacore.report.IndicatorReportDescriptor">
+    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.moh731b"
+        class="org.openmrs.module.kenyacore.report.IndicatorReportDescriptor">
         <property name="targetUuid" value="f8109c53-93bb-4561-b397-bb22ea317577" />
         <property name="name" value="MOH 731B Report" />
         <property name="description" value="MOH 731B Report based" />
         <property name="apps">
             <set>
                 <ref bean="kenyaemr.app.reports" />
-            </set></property>
+            </set>
+        </property>
         <property name="template" value="kenyakeypop:MOH_731Plus_Template.xls" />
     </bean>
 
-    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.monthlyReport" class="org.openmrs.module.kenyacore.report.IndicatorReportDescriptor">
+    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.monthlyReport"
+        class="org.openmrs.module.kenyacore.report.IndicatorReportDescriptor">
         <property name="targetUuid" value="a04f8608-bac6-4405-9c76-42a254b41959" />
         <property name="name" value="Monthly report" />
         <property name="description" value="KPIF Monthly reporting tool" />
         <property name="apps">
             <set>
                 <ref bean="kenyaemr.app.reports" />
-            </set></property>
+            </set>
+        </property>
         <property name="template" value="kenyakeypop:KP-Monthly-Reporting-Tool.xls" />
     </bean>
 
-    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.cohort.analysis.kpPeerTrackingRegister" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.cohort.analysis.kpPeerTrackingRegister"
+        class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
         <property name="targetUuid" value="e074b57d-78c3-43da-aa52-569d49ba2461" />
         <property name="name" value="Peer Tracking register" />
         <property name="description" value="Peer Tracking Register for KP" />
-        <property name="apps"><set><ref bean="kenyaemr.app.reports" /></set></property>
+        <property name="apps">
+            <set>
+                <ref bean="kenyaemr.app.reports" />
+            </set>
+        </property>
         <property name="template" value="kenyakeypop:A3_Peer_Tracking_Register.xls" />
         <property name="repeatingSection" value="sheet:1,row:10,dataset:PeerTrackingRegister" />
     </bean>
 
-    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.CurrentlyOnKpLineList" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+    <bean id="kenyaemr.kenyakeypop.kenyakeypop.report.CurrentlyOnKpLineList"
+        class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
         <property name="targetUuid" value="0d706d86-f8e2-44bc-bc40-9d00214c1fa0" />
         <property name="name" value="KP Active Clients line list" />
         <property name="description" value="KP Active Clients line list" />
-        <property name="apps"><set><ref bean="kenyaemr.app.reports" /></set></property>
+        <property name="apps">
+            <set>
+                <ref bean="kenyaemr.app.reports" />
+            </set>
+        </property>
     </bean>
 
     <!-- kp Appointments -->
-    <bean id="kenyakeypop.form.kpAppointmentCreation" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpAppointmentCreation"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="7587529e-9d84-4947-953e-afe5643cc816" />
         <property name="apps">
             <set>
@@ -249,14 +269,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpAppointmentCreation.html" />
         <property name="order" value="201006" />
     </bean>
 
     <!-- kp client tracing -->
-    <bean id="kenyakeypop.form.kpClientTracing" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpClientTracing"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="63917c60-3fea-11e9-b210-d663bd873d93" />
         <property name="apps">
             <set>
@@ -267,14 +289,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpClientTracing.html" />
         <property name="order" value="201007" />
     </bean>
 
     <!-- kp STI Treatment-->
-    <bean id="kenyakeypop.form.kpSTITreatment" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpSTITreatment"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="318ad7be-e4da-481f-bcdd-0368cb7601c8" />
         <property name="apps">
             <set>
@@ -285,14 +309,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpSTITreatment.html" />
         <property name="order" value="201011" />
     </bean>
 
     <!-- client Depression Screening -->
-    <bean id="kenyakeypop.form.kpDepressionScreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpDepressionScreening"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="5fe533ee-0c40-4a1f-a071-dc4d0fbb0c17" />
 
         <property name="apps">
@@ -304,14 +330,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForDepressionScreening" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForDepressionScreening" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpDepressionScreening.html" />
         <property name="order" value="201012" />
     </bean>
 
     <!-- kp client Peer Overdose Reporting -->
-    <bean id="kenyakeypop.form.kpPeerOverdoseReporting" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpPeerOverdoseReporting"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="92fd9c5a-c84a-483b-8d78-d4d7a600db30" />
         <property name="apps">
             <set>
@@ -328,7 +356,8 @@
     </bean>
 
     <!-- kp client Health care worker Overdose Reporting -->
-    <bean id="kenyakeypop.form.kpHealthWorkerOverdoseReporting" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpHealthWorkerOverdoseReporting"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="d753bab3-0bbb-43f5-9796-5e95a5d641f3" />
         <property name="apps">
             <set>
@@ -339,14 +368,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpHealthWorkerOverdoseReporting.html" />
         <property name="order" value="201016" />
     </bean>
 
     <!-- kp client Violence Screening -->
-    <bean id="kenyakeypop.form.kpViolenceScreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpViolenceScreening"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="10cd2ca0-8d25-4876-b97c-b568a912957e" />
         <property name="apps">
             <set>
@@ -357,7 +388,8 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpViolenceScreening.html" />
         <property name="order" value="201019" />
@@ -380,7 +412,8 @@
     </bean>
 
     <!-- kp alcohol screening -->
-    <bean id="kenyakeypop.form.kpAlcoholScreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpAlcoholScreening"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="7ba743c8-d8e6-44ad-aeed-8d2ff9e985db" />
         <property name="apps">
             <set>
@@ -391,14 +424,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpAlcoholScreening.html" />
         <property name="order" value="201021" />
     </bean>
 
     <!-- kp Clinical Visit Form -->
-    <bean id="kenyakeypop.form.kpClinicalVisitForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpClinicalVisitForm"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="92e041ac-9686-11e9-bc42-526af7764f64" />
         <property name="apps">
             <set>
@@ -409,7 +444,8 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpClinicalVisitForm.html" />
         <property name="order" value="201040" />
@@ -425,14 +461,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpDiagnosis.html" />
         <property name="order" value="201022" />
     </bean>
 
     <!--    kp TreatmentVerification-->
-    <bean id="kenyakeypop.form.kpTreatmentVerification" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.kpTreatmentVerification"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="a70a1132-75b3-11ea-bc55-0242ac130003" />
         <property name="apps">
             <set>
@@ -441,10 +479,12 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-<!--
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <!--
+        <property name="showIfCalculation"
+        value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
 -->
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForHivTreatmentForm" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForHivTreatmentForm" />
 
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpTreatmentVerificationForm.html" />
@@ -452,7 +492,8 @@
     </bean>
 
     <!--    Prep TreatmentVerification-->
-    <bean id="kenyakeypop.form.prepTreatmentVerification" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.prepTreatmentVerification"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="5c64e61a-7fdc-11ea-bc55-0242ac130003" />
         <property name="apps">
             <set>
@@ -461,14 +502,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForPrEPTreatmentVerificationForm" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForPrEPTreatmentVerificationForm" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpPrepVerificationForm.html" />
         <property name="order" value="201023" />
     </bean>
 
     <!--  Gender Based Violence Form-->
-    <bean id="kenyakeypop.form.genderBasedViolence" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyakeypop.form.genderBasedViolence"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="94eec122-83a1-11ea-bc55-0242ac130003" />
         <property name="apps">
             <set>
@@ -477,14 +520,16 @@
                 <ref bean="kenyakeypop.app.keypopulation.provider" />
             </set>
         </property>
-        <property name="showIfCalculation" value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
+        <property name="showIfCalculation"
+            value="org.openmrs.module.kenyakeypop.calculation.library.kp.EligibleForClinicalServices" />
         <property name="icon" value="kenyaui:forms/generic.png" />
         <property name="htmlform" value="kenyakeypop:kpGenderBasedViolence.html" />
         <property name="order" value="201023" />
     </bean>
 
     <!-- Clinical Encounter - TB Screening -->
-    <bean id="kenyaemr.common.form.tbScreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="kenyaemr.common.form.tbScreening"
+        class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="59ed8e62-7f1f-40ae-a2e3-eabe350277ce" />
         <property name="apps">
             <set>
@@ -501,13 +546,13 @@
     <!-- Wraps KenyakeypopService methods in DB transactions and OpenMRS interceptors,
     which set audit info like dateCreated, changedBy, etc.-->
     <bean id="kenyakeypop.KenyakeypopService"
-          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager" />
         </property>
         <property name="target">
             <bean class="org.openmrs.module.kenyakeypop.api.impl.KenyakeypopServiceImpl">
-                <property name="dao" >
+                <property name="dao">
                     <bean class="org.openmrs.module.kenyakeypop.api.dao.KenyakeypopDao">
                         <property name="sessionFactory">
                             <ref bean="sessionFactory" />
